@@ -25,35 +25,6 @@ resource "aws_subnet" "DevOps_VPC_Subnet" {
 } 
 
 
-
-# Create the Security Group
-resource "aws_security_group" "DevOps_VPC_Security_Group" {
-    vpc_id       = aws_vpc.DevOps_VPC.id
-    name         = "DevOps VPC Security Group"
-    description  = "DevOps VPC Security Group"
-
-    # allow ingress of port 22
-    ingress {
-    cidr_blocks = var.ingressCIDRblock  
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    } 
-
-    # allow egress of all ports
-    egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-    }
-    tags = {
-        Name = "DevOps VPC Security Group"
-        Description = "DevOps VPC Security Group"
-    }
-} 
-
-
 # create VPC Network access control list
 resource "aws_network_acl" "DevOps_VPC_Security_ACL" {
     vpc_id = aws_vpc.DevOps_VPC.id
@@ -123,21 +94,19 @@ resource "aws_network_acl" "DevOps_VPC_Security_ACL" {
 } 
 
 
-# Create the Internet Gateway
-resource "aws_internet_gateway" "DevOps_VPC_GW" {
-    vpc_id = aws_vpc.DevOps_VPC.id
-    tags = {
-        Name = "DevOps VPC Internet Gateway"
-    }
-}
-
-
 # Create the Route Table
 resource "aws_route_table" "DevOps_VPC_route_table" {
     vpc_id = aws_vpc.DevOps_VPC.id
     tags = {
         Name = "DevOps VPC Route Table"
     }   
+}
+
+
+# Associate the Route Table with the Subnet
+resource "aws_route_table_association" "DevOps_VPC_association" {
+    subnet_id      = aws_subnet.DevOps_VPC_Subnet.id
+    route_table_id = aws_route_table.DevOps_VPC_route_table.id
 }
 
 
@@ -149,8 +118,38 @@ resource "aws_route" "DevOps_VPC_internet_access" {
 } 
 
 
-# Associate the Route Table with the Subnet
-resource "aws_route_table_association" "DevOps_VPC_association" {
-    subnet_id      = aws_subnet.DevOps_VPC_Subnet.id
-    route_table_id = aws_route_table.DevOps_VPC_route_table.id
+# Create the Security Group
+resource "aws_security_group" "DevOps_VPC_Security_Group" {
+    vpc_id       = aws_vpc.DevOps_VPC.id
+    name         = "DevOps VPC Security Group"
+    description  = "DevOps VPC Security Group"
+
+    # allow ingress of port 22
+    ingress {
+    cidr_blocks = var.ingressCIDRblock  
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    } 
+
+    # allow egress of all ports
+    egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    }
+    tags = {
+        Name = "DevOps VPC Security Group"
+        Description = "DevOps VPC Security Group"
+    }
+} 
+
+
+# Create the Internet Gateway
+resource "aws_internet_gateway" "DevOps_VPC_GW" {
+    vpc_id = aws_vpc.DevOps_VPC.id
+    tags = {
+        Name = "DevOps VPC Internet Gateway"
+    }
 }
