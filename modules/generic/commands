@@ -14,7 +14,9 @@ git add fileName
 git commit -m 
 git push
 
+
+
 /******************Inspec Commands*********************/
 
-inspec init profile tests --overwrite #This will create the inspec folder structure
+inspec init profile tests --overwrite                    #This will create the inspec folder structure
 inspec exec "path to test file"   
