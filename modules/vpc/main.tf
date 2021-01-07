@@ -110,6 +110,15 @@ resource "aws_route_table_association" "DevOps_VPC_association" {
 }
 
 
+# Create the Internet Gateway
+resource "aws_internet_gateway" "DevOps_VPC_GW" {
+    vpc_id = aws_vpc.DevOps_VPC.id
+    tags = {
+        Name = "DevOps VPC Internet Gateway"
+    }
+}
+
+
 # Create the Internet Access
 resource "aws_route" "DevOps_VPC_internet_access" {
     route_table_id         = aws_route_table.DevOps_VPC_route_table.id
@@ -144,12 +153,3 @@ resource "aws_security_group" "DevOps_VPC_Security_Group" {
         Description = "DevOps VPC Security Group"
     }
 } 
-
-
-# Create the Internet Gateway
-resource "aws_internet_gateway" "DevOps_VPC_GW" {
-    vpc_id = aws_vpc.DevOps_VPC.id
-    tags = {
-        Name = "DevOps VPC Internet Gateway"
-    }
-}

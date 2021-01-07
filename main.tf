@@ -6,9 +6,9 @@ provider "aws" {
   region = "eu-west-2"
 }
 
-module "s3" {
-  source = "./modules/s3"
-}
+//module "s3" {
+//  source = "./modules/s3"
+//}
 
 module "vpc" {
   source = "./modules/vpc"
