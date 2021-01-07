@@ -1,0 +1,12 @@
+terraform init
+terraform plan
+terraform apply
+terraform destroy
+
+
+
+git pull
+git status
+git add fileName
+git commit -m 
+git push
